@@ -1,21 +1,37 @@
 "use client"
 
-import Image from "next/image";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Spotlight } from "@/components/spotlight"
 import { useSpotlight } from "@/hooks/useSpotlight"
 import { TrendChart } from "@/components/charts/TrendChart"
 import { DimensionChart } from "@/components/charts/DimensionChart"
 import { ComparisonChart } from "@/components/charts/ComparisonChart"
-import { getDesaList, getTrendData, getRataRataDimensi } from "@/data/indeksDesaDummy"
+import { getDesaList, getTrendData, getRataRataDimensi, type DesaData } from "@/data/indeksDesaDummy"
 import { BarChart3, TrendingUp, Users, MapPin, Eye, Download } from "lucide-react"
 import { Skeleton } from "@/components/ui/skeleton"
 import { useState, useEffect } from "react"
 
+interface DashboardData {
+  desaList: DesaData[]
+  trendData: { tahun: number; indeksRataRata: number }[]
+  rataRataDimensi: {
+    layananDasar: number
+    sosial: number
+    ekonomi: number
+    lingkungan: number
+    aksesibilitas: number
+    tataKelola: number
+  }
+  totalDesa: number
+  rataRataIndeks: number
+  desaTertinggi: DesaData
+  desaTerendah: DesaData
+}
+
 export default function HomePage() {
   const [loading, setLoading] = useState(true)
-  const [data, setData] = useState<any>(null)
-  const { isOpen: isSpotlightOpen, openSpotlight, closeSpotlight } = useSpotlight()
+  const [data, setData] = useState<DashboardData | null>(null)
+  const { isOpen: isSpotlightOpen, closeSpotlight } = useSpotlight()
 
   useEffect(() => {
     // Simulasi loading
@@ -29,9 +45,9 @@ export default function HomePage() {
         trendData,
         rataRataDimensi,
         totalDesa: desaList.length,
-        rataRataIndeks: desaList.reduce((sum: number, desa: any) => sum + desa.indeksTotal, 0) / desaList.length,
-        desaTertinggi: desaList.reduce((max: any, desa: any) => desa.indeksTotal > max.indeksTotal ? desa : max),
-        desaTerendah: desaList.reduce((min: any, desa: any) => desa.indeksTotal < min.indeksTotal ? desa : min)
+        rataRataIndeks: desaList.reduce((sum: number, desa: DesaData) => sum + desa.indeksTotal, 0) / desaList.length,
+        desaTertinggi: desaList.reduce((max: DesaData, desa: DesaData) => desa.indeksTotal > max.indeksTotal ? desa : max),
+        desaTerendah: desaList.reduce((min: DesaData, desa: DesaData) => desa.indeksTotal < min.indeksTotal ? desa : min)
       })
       setLoading(false)
     }, 1500)
@@ -39,7 +55,7 @@ export default function HomePage() {
     return () => clearTimeout(timer)
   }, [])
 
-  if (loading) {
+  if (loading || !data) {
     return <LoadingSkeleton />
   }
 

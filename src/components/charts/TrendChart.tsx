@@ -29,7 +29,7 @@ export function TrendChart({ data, height = 300 }: TrendChartProps) {
       textStyle: {
         color: theme === 'dark' ? '#f3f4f6' : '#1f2937'
       },
-      formatter: (params: any) => {
+      formatter: (params: Array<{name: string; value: number}>) => {
         const data = params[0];
         return `Tahun ${data.name}<br/>Indeks: ${data.value.toFixed(1)}`;
       }

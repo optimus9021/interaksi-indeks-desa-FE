@@ -19,9 +19,7 @@ import {
   Leaf, 
   Car, 
   Settings,
-  GraduationCap,
-  Heart,
-  Zap
+  GraduationCap
 } from "lucide-react"
 import Link from "next/link"
 
@@ -29,7 +27,7 @@ export default function DetailDesaPage() {
   const params = useParams()
   const [loading, setLoading] = useState(true)
   const [desa, setDesa] = useState<DesaData | null>(null)
-  const { isOpen: isSpotlightOpen, openSpotlight, closeSpotlight } = useSpotlight()
+  const { isOpen: isSpotlightOpen, closeSpotlight } = useSpotlight()
 
   useEffect(() => {
     const timer = setTimeout(() => {

@@ -8,7 +8,7 @@ import { ThemeToggle } from "@/components/theme-toggle"
 import { Settings, Type, Palette, Download, Save, RotateCcw } from "lucide-react"
 
 export default function PengaturanPage() {
-  const { isOpen: isSpotlightOpen, openSpotlight, closeSpotlight } = useSpotlight()
+  const { isOpen: isSpotlightOpen, closeSpotlight } = useSpotlight()
   const [fontSize, setFontSize] = useState<'small' | 'medium' | 'large'>('medium')
   const [fontFamily, setFontFamily] = useState<'default' | 'serif' | 'mono'>('default')
   const [autoSave, setAutoSave] = useState(true)

@@ -13,7 +13,7 @@ export default function DaftarDesaPage() {
   const [loading, setLoading] = useState(true)
   const [desaList, setDesaList] = useState<DesaData[]>([])
   const [filteredDesa, setFilteredDesa] = useState<DesaData[]>([])
-  const [localSearchTerm, setLocalSearchTerm] = useState("")
+  const [localSearchTerm] = useState("")
   const [filterWilayah, setFilterWilayah] = useState("")
   const [sortBy, setSortBy] = useState<'nama' | 'indeks' | 'wilayah'>('indeks')
   const { isOpen: isSpotlightOpen, openSpotlight, closeSpotlight } = useSpotlight()

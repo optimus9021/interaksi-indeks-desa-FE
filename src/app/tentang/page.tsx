@@ -17,7 +17,7 @@ import {
 } from "lucide-react"
 
 export default function TentangPage() {
-  const { isOpen: isSpotlightOpen, openSpotlight, closeSpotlight } = useSpotlight()
+  const { isOpen: isSpotlightOpen, closeSpotlight } = useSpotlight()
   
   const dimensiData = [
     {

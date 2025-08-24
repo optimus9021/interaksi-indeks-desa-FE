@@ -12,13 +12,11 @@ import { getDesaList, getTrendData, getRataRataDimensi, type DesaData } from "@/
 import { 
   BarChart3, 
   TrendingUp, 
-  TrendingDown,
   Target,
   Award,
   AlertTriangle,
   Filter,
   Download,
-  Calendar,
   MapPin,
   Users,
   Activity,
@@ -27,7 +25,15 @@ import {
 
 interface AnalysisData {
   trendData: { tahun: number; indeksRataRata: number }[]
-  dimensionData: any
+  dimensionData: {
+    [key: string]: number
+    layananDasar: number
+    sosial: number
+    ekonomi: number
+    lingkungan: number
+    aksesibilitas: number
+    tataKelola: number
+  }
   desaList: DesaData[]
   topPerformers: DesaData[]
   needsAttention: DesaData[]
@@ -39,9 +45,7 @@ interface AnalysisData {
 export default function AnalisisPage() {
   const [loading, setLoading] = useState(true)
   const [data, setData] = useState<AnalysisData | null>(null)
-  const [selectedYear, setSelectedYear] = useState(2024)
-  const [selectedDimension, setSelectedDimension] = useState<string>('all')
-  const { isOpen: isSpotlightOpen, openSpotlight, closeSpotlight } = useSpotlight()
+  const { isOpen: isSpotlightOpen, closeSpotlight } = useSpotlight()
 
   useEffect(() => {
     // Simulasi loading data
@@ -321,7 +325,7 @@ export default function AnalisisPage() {
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
-              {data.needsAttention.map((desa, index) => (
+              {data.needsAttention.map((desa) => (
                 <div key={desa.id} className="flex items-center justify-between p-4 rounded-lg bg-orange-50 dark:bg-orange-900/10">
                   <div className="flex items-center space-x-3">
                     <div className="flex-shrink-0">

@@ -31,7 +31,7 @@ export function ComparisonChart({ data, height = 400, title = "Perbandingan Inde
       textStyle: {
         color: theme === 'dark' ? '#f3f4f6' : '#1f2937'
       },
-      formatter: (params: any) => {
+      formatter: (params: Array<{name: string; value: number}>) => {
         const data = params[0];
         return `${data.name}<br/>Indeks Total: ${data.value.toFixed(1)}`;
       }

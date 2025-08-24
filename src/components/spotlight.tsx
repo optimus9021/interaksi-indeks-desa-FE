@@ -1,7 +1,7 @@
 'use client'
 
-import { useState, useEffect, useRef } from "react"
-import { Search, Command, Mic, MicOff, X, ArrowUp, ArrowDown } from "lucide-react"
+import { useState, useEffect, useRef, useCallback, useMemo } from "react"
+import { Search, Mic, MicOff, X, ArrowUp, ArrowDown } from "lucide-react"
 import { cn } from "@/lib/utils"
 
 interface SpotlightProps {
@@ -11,6 +11,14 @@ interface SpotlightProps {
   onSearch?: (query: string) => void
 }
 
+interface SearchResult {
+  id: number
+  type: string
+  title: string
+  subtitle: string
+  icon: string
+}
+
 export function Spotlight({ isOpen, onClose, placeholder = "Cari data desa...", onSearch }: SpotlightProps) {
   const [query, setQuery] = useState("")
   const [isListening, setIsListening] = useState(false)
@@ -18,15 +26,21 @@ export function Spotlight({ isOpen, onClose, placeholder = "Cari data desa...", 
   const inputRef = useRef<HTMLInputElement>(null)
   
   // Mock search results
-  const [results, setResults] = useState<any[]>([])
+  const [results, setResults] = useState<SearchResult[]>([])
   
-  const mockResults = [
+  const mockResults: SearchResult[] = useMemo(() => [
     { id: 1, type: "desa", title: "Desa Cinta Damai", subtitle: "Kalimantan Utara • Indeks: 88.7", icon: "🏘️" },
     { id: 2, type: "desa", title: "Desa Harapan Baru", subtitle: "Jawa Barat • Indeks: 73.2", icon: "🏘️" },
     { id: 3, type: "analisis", title: "Analisis Dimensi Layanan Dasar", subtitle: "Laporan terbaru", icon: "📊" },
     { id: 4, type: "filter", title: "Filter berdasarkan skor tinggi", subtitle: "Desa dengan indeks > 85", icon: "🔍" },
     { id: 5, type: "export", title: "Export data ke PDF", subtitle: "Download laporan lengkap", icon: "📄" },
-  ]
+  ], [])
+
+  const handleSelectResult = useCallback((result: SearchResult) => {
+    console.log('Selected:', result)
+    setQuery("")
+    onClose()
+  }, [onClose])
 
   // Handle search input
   useEffect(() => {
@@ -41,7 +55,7 @@ export function Spotlight({ isOpen, onClose, placeholder = "Cari data desa...", 
       setResults([])
       setSelectedIndex(-1)
     }
-  }, [query])
+  }, [query, mockResults])
 
   // Focus input when opened
   useEffect(() => {
@@ -85,14 +99,7 @@ export function Spotlight({ isOpen, onClose, placeholder = "Cari data desa...", 
 
     document.addEventListener('keydown', handleKeyDown)
     return () => document.removeEventListener('keydown', handleKeyDown)
-  }, [isOpen, results, selectedIndex, query, onSearch, onClose])
-
-  const handleSelectResult = (result: any) => {
-    console.log('Selected:', result)
-    setQuery("")
-    setResults([])
-    onClose()
-  }
+  }, [isOpen, results, selectedIndex, query, onSearch, onClose, handleSelectResult])
 
   const startVoiceSearch = () => {
     setIsListening(true)
@@ -208,10 +215,10 @@ export function Spotlight({ isOpen, onClose, placeholder = "Cari data desa...", 
               <div className="p-8 text-center">
                 <Search className="h-8 w-8 text-gray-400 mx-auto mb-3" />
                 <div className="text-gray-500 dark:text-gray-400">
-                  Tidak ada hasil untuk "{query}"
+                  Tidak ada hasil untuk &quot;{query}&quot;
                 </div>
                 <div className="text-sm text-gray-400 dark:text-gray-500 mt-1">
-                  Coba kata kunci lain atau gunakan voice search
+                  Tekan &quot;Enter&quot; untuk mencari dengan kata kunci ini
                 </div>
               </div>
             )}
